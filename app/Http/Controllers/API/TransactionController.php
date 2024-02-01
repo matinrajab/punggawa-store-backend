@@ -34,13 +34,14 @@ class TransactionController extends Controller
                 );
         }
 
-        $transaction = Transaction::with(['items.product'])->where('user_id', Auth::user()->id);
+        $transaction = Transaction::with(['items.product.category', 'items.product.galleries'])->where('user_id', Auth::user()->id);
 
         if ($status)
             $transaction->where('status', $status);
 
         return ResponseFormatter::success(
-            $transaction->paginate($limit),
+            // $transaction->paginate($limit),
+            $transaction->latest()->get(),
             'Data list transaksi berhasil diambil'
         );
     }

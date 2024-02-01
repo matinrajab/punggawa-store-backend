@@ -41,7 +41,8 @@ class CategoryController extends Controller
             $category->with('products');
 
         return ResponseFormatter::success(
-            $category->paginate($limit),
+            // $category->paginate($limit),
+            $category->get(),
             'Data list kategori produk berhasil diambil'
         );
     }
