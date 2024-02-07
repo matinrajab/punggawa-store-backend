@@ -49,6 +49,7 @@ class TransactionController extends Controller
     public function checkout(CheckoutRequest $request)
     {
         $transaction = Transaction::create([
+            'midtrans_order_id' => rand(),
             'user_id' => Auth::user()->id,
             'address' => $request->address,
             'total_price' => $request->total_price,
@@ -65,6 +66,41 @@ class TransactionController extends Controller
             ]);
         }
 
-        return ResponseFormatter::success($transaction->load('items.product'), 'Transaksi berhasil');
+        \Midtrans\Config::$serverKey = config('midtrans.server_key');
+        \Midtrans\Config::$isProduction = config('midtrans.is_production');
+        \Midtrans\Config::$isSanitized = true;
+        \Midtrans\Config::$is3ds = true;
+
+        $params = array(
+            'transaction_details' => array(
+                'order_id' => $transaction->midtrans_order_id,
+                'gross_amount' => $transaction->total_price + $transaction->shipping_price,
+            ),
+            'customer_details' => array(
+                'first_name' => Auth::user()->name,
+                'last_name' => '',
+                'email' => Auth::user()->email,
+                'phone' => Auth::user()->phone,
+            ),
+        );
+
+        $snapToken = \Midtrans\Snap::getSnapToken($params);
+
+        return ResponseFormatter::success([
+            'snapToken' => $snapToken,
+            'transaction' => $transaction->load('items.product')
+        ], 'Pesanan berhasil dibuat');
+    }
+
+    public function callback(Request $request)
+    {
+        $serverKey = config('midtrans.server_key');
+        $hashed = hash("sha512", $request->order_id . $request->status_code . $request->gross_amount . $serverKey);
+        if ($hashed == $request->signature_key) {
+            if ($request->transaction_status == 'capture' || $request->transaction_status == 'settlement') {
+                $transaction = Transaction::whereMidtransOrderId($request->order_id);
+                $transaction->update(['status' => 'SHIPPING']);
+            }
+        }
     }
 }

@@ -13,6 +13,7 @@ class Transaction extends Model
     use HasFactory, SoftDeletes;
 
     protected $fillable = [
+        'midtrans_order_id',
         'user_id',
         'address',
         'payment_method',

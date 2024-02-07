@@ -24,6 +24,8 @@ Route::get('categories', [CategoryController::class, 'all']);
 Route::post('register', [UserController::class, 'register']);
 Route::post('login', [UserController::class, 'login']);
 
+Route::post('midtrans-callback', [TransactionController::class, 'callback']);
+
 Route::middleware('auth:sanctum')->group(function () {
     Route::get('user', [UserController::class, 'fetch']);
     Route::post('user', [UserController::class, 'updateProfile']);
