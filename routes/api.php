@@ -3,6 +3,7 @@
 use App\Http\Controllers\API\CategoryController;
 use App\Http\Controllers\API\ProductController;
 use App\Http\Controllers\API\TransactionController;
+use App\Http\Controllers\API\TransactionStatusController;
 use App\Http\Controllers\API\UserController;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Route;
@@ -33,4 +34,5 @@ Route::middleware('auth:sanctum')->group(function () {
 
     Route::get('transactions', [TransactionController::class, 'all']);
     Route::post('checkout', [TransactionController::class, 'checkout']);
+    Route::put('transaction-status/{id}', [TransactionStatusController::class, 'update'])->middleware('transaction.owner');
 });

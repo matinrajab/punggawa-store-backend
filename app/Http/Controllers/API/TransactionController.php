@@ -41,7 +41,7 @@ class TransactionController extends Controller
 
         return ResponseFormatter::success(
             // $transaction->paginate($limit),
-            $transaction->latest()->get(),
+            $transaction->orderByDesc('updated_at')->get(),
             'Data list transaksi berhasil diambil'
         );
     }
