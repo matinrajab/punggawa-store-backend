@@ -4,7 +4,7 @@ namespace App\Http\Requests;
 
 use Illuminate\Foundation\Http\FormRequest;
 
-class CheckoutRequest extends FormRequest
+class TopupRequest extends FormRequest
 {
     /**
      * Determine if the user is authorized to make this request.
@@ -22,13 +22,7 @@ class CheckoutRequest extends FormRequest
     public function rules(): array
     {
         return [
-            'payment_method_id' => 'required|exists:payment_methods,id',
-            'address' => 'required|string',
-            'items' => 'required|array',
-            'items.*.id' => 'exists:products,id',
-            'total_price' => 'required',
-            'shipping_price' => 'required',
-            'status' => 'required|in:PENDING,SUCCESS,CANCELLED,FAILED,SHIPPING,SHIPPED'
+            'amount' => 'required',
         ];
     }
 }

@@ -1,6 +1,7 @@
 <?php
 
 use App\Http\Controllers\API\CategoryController;
+use App\Http\Controllers\API\PaymentMethodController;
 use App\Http\Controllers\API\ProductController;
 use App\Http\Controllers\API\TransactionController;
 use App\Http\Controllers\API\TransactionStatusController;
@@ -21,6 +22,7 @@ use Illuminate\Support\Facades\Route;
 
 Route::get('products', [ProductController::class, 'all']);
 Route::get('categories', [CategoryController::class, 'all']);
+Route::get('payment_methods', [PaymentMethodController::class, 'all']);
 
 Route::post('register', [UserController::class, 'register']);
 Route::post('login', [UserController::class, 'login']);
@@ -34,5 +36,6 @@ Route::middleware('auth:sanctum')->group(function () {
 
     Route::get('transactions', [TransactionController::class, 'all']);
     Route::post('checkout', [TransactionController::class, 'checkout']);
+    Route::post('topup', [TransactionController::class, 'topup']);
     Route::put('transaction-status/{id}', [TransactionStatusController::class, 'update'])->middleware('transaction.owner');
 });

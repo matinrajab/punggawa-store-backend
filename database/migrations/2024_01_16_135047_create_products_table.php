@@ -15,7 +15,7 @@ return new class extends Migration
             $table->id();
             $table->foreignId('category_id')->constrained();
             $table->string('name');
-            $table->float('price');
+            $table->unsignedBigInteger('price');
             $table->longText('description');
             $table->string('tags')->nullable();
             $table->timestamps();

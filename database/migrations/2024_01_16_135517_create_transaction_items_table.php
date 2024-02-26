@@ -18,6 +18,7 @@ return new class extends Migration
             $table->foreignId('transaction_id')->constrained();
             $table->unsignedBigInteger('quantity');
             $table->timestamps();
+            $table->softDeletes();
         });
     }
 

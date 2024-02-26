@@ -28,7 +28,7 @@ class User extends Authenticatable
         'name',
         'username',
         'phone',
-        'roles',
+        'balance',
         'email',
         'password',
     ];
@@ -71,5 +71,10 @@ class User extends Authenticatable
     public function transactions(): HasMany
     {
         return $this->hasMany(Transaction::class);
+    }
+
+    public function midtrans(): HasMany
+    {
+        return $this->hasMany(Midtrans::class);
     }
 }
