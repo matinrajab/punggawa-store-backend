@@ -38,4 +38,5 @@ Route::middleware('auth:sanctum')->group(function () {
     Route::post('checkout', [TransactionController::class, 'checkout']);
     Route::post('top-up', [TransactionController::class, 'topup']);
     Route::put('transaction-status/{id}', [TransactionStatusController::class, 'update'])->middleware('transaction.owner');
+    Route::put('bonus', [TransactionController::class, 'addBonus']);
 });

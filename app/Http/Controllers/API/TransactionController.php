@@ -4,6 +4,7 @@ namespace App\Http\Controllers\API;
 
 use App\Helpers\ResponseFormatter;
 use App\Http\Controllers\Controller;
+use App\Http\Requests\BonusRequest;
 use App\Http\Requests\CheckoutRequest;
 use App\Http\Requests\TopupRequest;
 use App\Models\Midtrans;
@@ -173,5 +174,16 @@ class TransactionController extends Controller
                 }
             }
         }
+    }
+
+    public function addBonus(BonusRequest $request)
+    {
+        $user = User::find(Auth::user()->id);
+        $user->update(['balance' => $user->balance + $request->amount]);
+
+        return ResponseFormatter::success(
+            $user,
+            'Berhasil mendapat bonus Rp. ' . $request->amount
+        );
     }
 }
