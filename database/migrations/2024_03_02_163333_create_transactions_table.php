@@ -15,7 +15,10 @@ return new class extends Migration
             $table->id();
             $table->foreignId('user_id')->constrained();
             $table->foreignId('payment_method_id')->constrained();
-            $table->string('address')->nullable();
+            $table->string('name');
+            $table->string('phone');
+            $table->longText('address');
+            $table->foreignId('address_category_id')->constrained();
             $table->unsignedBigInteger('total_price')->default(0);
             $table->unsignedBigInteger('shipping_price')->default(0);
             $table->string('status')->default('PENDING');

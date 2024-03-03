@@ -16,7 +16,10 @@ class Transaction extends Model
     protected $fillable = [
         'user_id',
         'payment_method_id',
+        'name',
+        'phone',
         'address',
+        'address_category_id',
         'total_price',
         'shipping_price',
         'status',
@@ -40,5 +43,10 @@ class Transaction extends Model
     public function midtrans(): HasOne
     {
         return $this->hasOne(Midtrans::class);
+    }
+
+    public function addressCategory(): BelongsTo
+    {
+        return $this->belongsTo(AddressCategory::class);
     }
 }

@@ -4,10 +4,10 @@ namespace App\Http\Controllers\API;
 
 use App\Helpers\ResponseFormatter;
 use App\Http\Controllers\Controller;
-use App\Models\Category;
+use App\Models\ProductCategory;
 use Illuminate\Http\Request;
 
-class CategoryController extends Controller
+class ProductCategoryController extends Controller
 {
     public function all(Request $request)
     {
@@ -17,7 +17,7 @@ class CategoryController extends Controller
         $show_product = $request->input('show_product');
 
         if ($id) {
-            $category = Category::with(['products'])->find($id);
+            $category = ProductCategory::with(['products'])->find($id);
 
             if ($category)
                 return ResponseFormatter::success(
@@ -32,7 +32,7 @@ class CategoryController extends Controller
                 );
         }
 
-        $category = Category::query();
+        $category = ProductCategory::query();
 
         if ($name)
             $category->where('name', 'like', '%' . $name . '%');

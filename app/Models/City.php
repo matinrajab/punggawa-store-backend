@@ -5,18 +5,18 @@ namespace App\Models;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\HasMany;
-use Illuminate\Database\Eloquent\SoftDeletes;
 
-class Category extends Model
+class City extends Model
 {
-    use HasFactory, SoftDeletes;
+    use HasFactory;
 
     protected $fillable = [
         'name',
+        'id_from_api',
     ];
 
-    public function products(): HasMany
+    public function addresses(): HasMany
     {
-        return $this->hasMany(Product::class);
+        return $this->hasMany(Address::class);
     }
 }

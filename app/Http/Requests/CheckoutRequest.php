@@ -23,9 +23,9 @@ class CheckoutRequest extends FormRequest
     {
         return [
             'payment_method_id' => 'required|exists:payment_methods,id',
-            'address' => 'required|string',
+            'address_id' => 'required|exists:addresses,id',
             'items' => 'required|array',
-            'items.*.id' => 'exists:products,id',
+            'items.*.id' => 'required|exists:products,id',
             'total_price' => 'required',
             'shipping_price' => 'required',
             'status' => 'required|in:PENDING,SUCCESS,CANCELLED,FAILED,SHIPPING,SHIPPED'

@@ -85,7 +85,7 @@ class UserController extends Controller
         }
     }
 
-    public function fetch(Request $request)
+    public function fetch()
     {
         return ResponseFormatter::success(Auth::user(), 'Data profile user berhasil diambil');
     }

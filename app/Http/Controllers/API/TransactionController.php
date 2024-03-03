@@ -7,6 +7,7 @@ use App\Http\Controllers\Controller;
 use App\Http\Requests\BonusRequest;
 use App\Http\Requests\CheckoutRequest;
 use App\Http\Requests\TopupRequest;
+use App\Models\Address;
 use App\Models\Midtrans;
 use App\Models\PaymentMethod;
 use App\Models\Transaction;
@@ -39,7 +40,7 @@ class TransactionController extends Controller
                 );
         }
 
-        $transaction = Transaction::with(['items.product.category', 'items.product.galleries', 'paymentMethod'])->where('user_id', Auth::user()->id);
+        $transaction = Transaction::with(['items.product.productCategory', 'items.product.galleries', 'paymentMethod', 'addressCategory'])->where('user_id', Auth::user()->id);
 
         if ($status)
             $transaction->where('status', $status);
@@ -65,9 +66,29 @@ class TransactionController extends Controller
             $user->update(['balance' => $user->balance - ($request->total_price + $request->shipping_price)]);
         }
 
+        $address = Address::findOrFail($request->address_id);
+        $address_category_id = $address->address_category_id;
+        $province = $address->province->name;
+        $city = $address->city->name;
+        $district = $address->district->name;
+        $postal_code = $address->postalCode->name;
+        $name = $address->name;
+        $phone = $address->phone;
+        $detail = $address->detail;
+        $additional = $address->additional;
+
+        if (!$additional) {
+            $address = $detail .  ', ' . $city . ', ' . $district . ', ' . $province . ', ' . $postal_code;
+        } else {
+            $address = $detail . ' (' . $additional . '), ' . $city . ', ' . $district . ', ' . $province . ', ' . $postal_code;
+        }
+
         $transaction = Transaction::create([
             'user_id' => $user->id,
-            'address' => $request->address,
+            'name' => $name,
+            'phone' => $phone,
+            'address' => $address,
+            'address_category_id' => $address_category_id,
             'total_price' => $request->total_price,
             'shipping_price' => $request->shipping_price,
             'payment_method_id' => $request->payment_method_id,
@@ -124,7 +145,7 @@ class TransactionController extends Controller
 
     public function topup(TopupRequest $request)
     {
-        $user = User::find(Auth::user()->id);
+        $user = Auth::user();
 
         $midtrans = Midtrans::create([
             'user_id' => $user->id,

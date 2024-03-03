@@ -77,4 +77,9 @@ class User extends Authenticatable
     {
         return $this->hasMany(Midtrans::class);
     }
+
+    public function addresses(): HasMany
+    {
+        return $this->hasMany(Address::class);
+    }
 }

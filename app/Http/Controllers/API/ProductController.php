@@ -16,7 +16,7 @@ class ProductController extends Controller
         $name = $request->input('name');
         $description = $request->input('description');
         $tags = $request->input('tags');
-        $categories = $request->input('categories');
+        $product_categories = $request->input('product_categories');
         $price_from = $request->input('price_from');
         $price_to = $request->input('price_to');
 
@@ -36,7 +36,7 @@ class ProductController extends Controller
                 );
         }
 
-        $product = Product::with(['category', 'galleries']);
+        $product = Product::with(['productCategory', 'galleries']);
 
         if ($name)
             $product->where('name', 'like', '%' . $name . '%');
@@ -53,8 +53,8 @@ class ProductController extends Controller
         if ($price_to)
             $product->where('price', '<=', $price_to);
 
-        if ($categories)
-            $product->where('category_id', $categories);
+        if ($product_categories)
+            $product->where('product_category_id', $product_categories);
 
         return ResponseFormatter::success(
             // $product->paginate($limit),
