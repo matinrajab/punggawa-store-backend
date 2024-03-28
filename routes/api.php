@@ -2,6 +2,7 @@
 
 use App\Http\Controllers\API\AddressCategoryController;
 use App\Http\Controllers\API\AddressController;
+use App\Http\Controllers\API\OpenAIController;
 use App\Http\Controllers\API\PaymentMethodController;
 use App\Http\Controllers\API\ProductCategoryController;
 use App\Http\Controllers\API\ProductController;
@@ -47,3 +48,5 @@ Route::middleware('auth:sanctum')->group(function () {
     Route::put('transaction-status/{id}', [TransactionStatusController::class, 'update'])->middleware('transaction.owner');
     Route::put('bonus', [TransactionController::class, 'addBonus']);
 });
+
+Route::post('chat', [OpenAIController::class, 'chat']);
