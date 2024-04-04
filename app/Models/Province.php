@@ -12,7 +12,7 @@ class Province extends Model
 
     protected $fillable = [
         'name',
-        'id_from_api',
+        'province_id',
     ];
 
     public function addresses(): HasMany

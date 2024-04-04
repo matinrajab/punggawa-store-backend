@@ -7,8 +7,6 @@ use App\Http\Controllers\Controller;
 use App\Http\Requests\AddressRequest;
 use App\Models\Address;
 use App\Models\City;
-use App\Models\District;
-use App\Models\PostalCode;
 use App\Models\Province;
 use Illuminate\Support\Facades\Auth;
 
@@ -19,7 +17,7 @@ class AddressController extends Controller
     {
         $user = Auth::user();
 
-        $address = Address::with(['province', 'city', 'district', 'postalCode', 'addressCategory'])->whereUserId($user->id)->orderByDesc('updated_at')->get();
+        $address = Address::with(['province', 'city.cityType', 'addressCategory'])->whereUserId($user->id)->orderByDesc('updated_at')->get();
 
         return ResponseFormatter::success(
             $address,
@@ -31,35 +29,20 @@ class AddressController extends Controller
     {
         $user = Auth::user();
 
-        $province = Province::whereName($request->province_name)->first();
+        $province = Province::whereName($request->province)->first();
         if (!$province) {
             $province = Province::create([
-                'name' => $request->province_name,
-                'id_from_api' => $request->province_id
+                'name' => $request->province,
+                'province_id' => $request->province_id
             ]);
         }
 
         $city = City::whereName($request->city_name)->first();
         if (!$city) {
             $city = City::create([
+                'city_type_id' => $request->city_type_id,
                 'name' => $request->city_name,
-                'id_from_api' => $request->city_id
-            ]);
-        }
-
-        $district = District::whereName($request->district_name)->first();
-        if (!$district) {
-            $district = District::create([
-                'name' => $request->district_name,
-                'id_from_api' => $request->district_id
-            ]);
-        }
-
-        $postal_code = PostalCode::whereName($request->postal_code_name)->first();
-        if (!$postal_code) {
-            $postal_code = PostalCode::create([
-                'name' => $request->postal_code_name,
-                'id_from_api' => $request->postal_code_id
+                'city_id' => $request->city_id
             ]);
         }
 
@@ -67,8 +50,6 @@ class AddressController extends Controller
             'user_id' => $user->id,
             'province_id' => $province->id,
             'city_id' => $city->id,
-            'district_id' => $district->id,
-            'postal_code_id' => $postal_code->id,
             'address_category_id' => $request->address_category_id,
             'name' => $request->name,
             'phone' => $request->phone,
@@ -88,38 +69,21 @@ class AddressController extends Controller
 
         $province_old = $address->province;
         $city_old = $address->city;
-        $district_old = $address->district;
-        $postal_code_old = $address->postalCode;
 
-        $province = Province::whereName($request->province_name)->first();
+        $province = Province::whereName($request->province)->first();
         if (!$province) {
             $province = Province::create([
-                'name' => $request->province_name,
-                'id_from_api' => $request->province_id
+                'name' => $request->province,
+                'province_id' => $request->province_id
             ]);
         }
 
         $city = City::whereName($request->city_name)->first();
         if (!$city) {
             $city = City::create([
+                'city_type_id' => $request->city_type_id,
                 'name' => $request->city_name,
-                'id_from_api' => $request->city_id
-            ]);
-        }
-
-        $district = District::whereName($request->district_name)->first();
-        if (!$district) {
-            $district = District::create([
-                'name' => $request->district_name,
-                'id_from_api' => $request->district_id
-            ]);
-        }
-
-        $postal_code = PostalCode::whereName($request->postal_code_name)->first();
-        if (!$postal_code) {
-            $postal_code = PostalCode::create([
-                'name' => $request->postal_code_name,
-                'id_from_api' => $request->postal_code_id
+                'city_id' => $request->city_id
             ]);
         }
 
@@ -127,8 +91,6 @@ class AddressController extends Controller
             [
                 'province_id' => $province->id,
                 'city_id' => $city->id,
-                'district_id' => $district->id,
-                'postal_code_id' => $postal_code->id,
                 'address_category_id' => $request->address_category_id,
                 'name' => $request->name,
                 'phone' => $request->phone,
@@ -144,15 +106,6 @@ class AddressController extends Controller
         if ($city_old->addresses->count() == 0) {
             $city_old->delete();
         }
-
-        if ($district_old->addresses->count() == 0) {
-            $district_old->delete();
-        }
-
-        if ($postal_code_old->addresses->count() == 0) {
-            $postal_code_old->delete();
-        }
-
         return ResponseFormatter::success(
             null,
             'Address Updated Successfully'
@@ -165,8 +118,6 @@ class AddressController extends Controller
 
         $province_old = $address->province;
         $city_old = $address->city;
-        $district_old = $address->district;
-        $postal_code_old = $address->postalCode;
 
         $address->delete();
 
@@ -176,14 +127,6 @@ class AddressController extends Controller
 
         if ($city_old->addresses->count() == 0) {
             $city_old->delete();
-        }
-
-        if ($district_old->addresses->count() == 0) {
-            $district_old->delete();
-        }
-
-        if ($postal_code_old->addresses->count() == 0) {
-            $postal_code_old->delete();
         }
 
         return ResponseFormatter::success(

@@ -69,18 +69,18 @@ class TransactionController extends Controller
         $address = Address::findOrFail($request->address_id);
         $address_category_id = $address->address_category_id;
         $province = $address->province->name;
-        $city = $address->city->name;
-        $district = $address->district->name;
-        $postal_code = $address->postalCode->name;
+        $city = $address->city;
+        $cityType = $city->cityType->name;
+        $cityName = $city->name;
         $name = $address->name;
         $phone = $address->phone;
         $detail = $address->detail;
         $additional = $address->additional;
 
         if (!$additional) {
-            $address = $detail .  ', ' . $city . ', ' . $district . ', ' . $province . ', ' . $postal_code;
+            $address = $detail . ', ' . $cityType . ' ' . $cityName . ', ' . $province;
         } else {
-            $address = $detail . ' (' . $additional . '), ' . $city . ', ' . $district . ', ' . $province . ', ' . $postal_code;
+            $address = $detail . ' (' . $additional . '), ' . $cityType . ' ' . $cityName . ', ' . $province;
         }
 
         $transaction = Transaction::create([

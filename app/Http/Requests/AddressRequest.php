@@ -22,14 +22,11 @@ class AddressRequest extends FormRequest
     public function rules(): array
     {
         return [
-            'province_name' => ['required', 'string', 'max:255'],
+            'province' => ['required', 'string', 'max:255'],
             'province_id' => ['required', 'string', 'max:255'],
+            'city_type_id' => ['required', 'exists:city_types,id'],
             'city_name' => ['required', 'string', 'max:255'],
             'city_id' => ['required', 'string', 'max:255'],
-            'district_name' => ['required', 'string', 'max:255'],
-            'district_id' => ['required', 'string', 'max:255'],
-            'postal_code_name' => ['required', 'string', 'max:255'],
-            'postal_code_id' => ['required', 'string', 'max:255'],
             'address_category_id' => ['required', 'exists:address_categories,id'],
             'name' => ['required', 'string', 'max:255'],
             'phone' => ['required', 'string', 'max:255'],

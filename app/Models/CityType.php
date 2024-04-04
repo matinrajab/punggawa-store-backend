@@ -6,17 +6,16 @@ use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\HasMany;
 
-class PostalCode extends Model
+class CityType extends Model
 {
     use HasFactory;
 
     protected $fillable = [
         'name',
-        'id_from_api',
     ];
 
-    public function addresses(): HasMany
+    public function cities(): HasMany
     {
-        return $this->hasMany(Address::class);
+        return $this->hasMany(City::class);
     }
 }

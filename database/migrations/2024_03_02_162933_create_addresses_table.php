@@ -16,8 +16,6 @@ return new class extends Migration
             $table->foreignId('user_id')->constrained();
             $table->foreignId('province_id')->constrained();
             $table->foreignId('city_id')->constrained();
-            $table->foreignId('district_id')->constrained();
-            $table->foreignId('postal_code_id')->constrained();
             $table->foreignId('address_category_id')->constrained();
             $table->string('name');
             $table->string('phone');

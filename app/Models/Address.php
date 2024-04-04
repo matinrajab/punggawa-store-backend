@@ -31,16 +31,6 @@ class Address extends Model
         return $this->belongsTo(City::class);
     }
 
-    public function district(): BelongsTo
-    {
-        return $this->belongsTo(District::class);
-    }
-
-    public function postalCode(): BelongsTo
-    {
-        return $this->belongsTo(PostalCode::class);
-    }
-
     public function addressCategory(): BelongsTo
     {
         return $this->belongsTo(AddressCategory::class);
