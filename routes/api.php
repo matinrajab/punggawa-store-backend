@@ -33,6 +33,7 @@ Route::post('login', [UserController::class, 'login']);
 Route::post('midtrans-callback', [TransactionController::class, 'callback']);
 
 Route::middleware('auth:sanctum')->group(function () {
+    Route::get('users', [UserController::class, 'all'])->middleware('admin');
     Route::get('user', [UserController::class, 'fetch']);
     Route::post('user', [UserController::class, 'updateProfile']);
     Route::post('logout', [UserController::class, 'logout']);

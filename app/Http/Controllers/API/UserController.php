@@ -106,4 +106,13 @@ class UserController extends Controller
 
         return ResponseFormatter::success(null, 'Logout success');
     }
+
+    public function all()
+    {
+        $users = User::all();
+        return ResponseFormatter::success(
+            $users,
+            'Data semua user berhasil diambil'
+        );
+    }
 }
